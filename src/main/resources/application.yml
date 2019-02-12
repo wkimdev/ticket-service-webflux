@@ -1,0 +1,41 @@
+#spring  setup and common configuration
+spring:
+  profiles:
+    active: local
+
+server:
+  port: 8099
+
+api:
+  contextRoot: /api
+
+---
+#spring profiles : LOCAL
+#spring and hikari setup
+spring:
+  profiles: local
+  
+#logging
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+        
+
+  
+          
+---
+#spring profiles : DEV
+spring:
+  profiles: dev
+  
+#logging
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        web: DEBUG
+        
