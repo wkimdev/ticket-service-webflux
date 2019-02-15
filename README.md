@@ -10,10 +10,10 @@
 - choose date ( 프론트엔드 라이브러리..?)
 - choose seat (R, S, A, VIP)
 - buy ticket
-- buy item (프로그램북, 굿즈)
-- login
-- logout
-
+- buy item (프로그램북, 굿즈) 
+- login 
+- logout 
+- insert 
 
 # show table 구성
 - show_name, 장르(뮤지컬, 콘서트, 연극), 러닝타임, 관람가능연령, 기간(2019.03.09 ~ 2019.04.21), 장소, 부제, 출연 
@@ -21,3 +21,8 @@
 
 # tech stack
 - spring boot, rxjava, webflux  
+
+
+# 
+jpa 장점 : db간 마이그레이션 스키마 변경 빼곤 큰 코드 변경 없이 사용할 수 있음.
+

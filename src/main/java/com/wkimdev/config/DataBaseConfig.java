@@ -1,5 +1,10 @@
 package com.wkimdev.config;
 
-public class DataBaseConfig {
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+public class DataBaseConfig {
+	
+	
+	
 }

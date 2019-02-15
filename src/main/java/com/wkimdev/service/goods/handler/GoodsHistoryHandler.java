@@ -1,13 +1,16 @@
-package com.wkimdev.service.handler;
+package com.wkimdev.service.goods.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import com.wkimdev.service.OrderService;
+import com.wkimdev.service.goods.GoodsHistoryService;
+import com.wkimdev.service.goods.domain.GoodsHistory;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -16,21 +19,18 @@ import reactor.core.publisher.Mono;
  * 
  */
 @Component
-public class ShowHistoryHandler {
+public class GoodsHistoryHandler {
 	
 	@Autowired
-	private OrderService orderService;
+	private GoodsHistoryService goodsHistoryService;
 	
-	//  
 	/**
 	 * select show list
 	 * @param request
 	 * @return Mono<ServerResponse>
 	 */
-	public Mono<ServerResponse> findById(ServerRequest request) {
-//		String txId = request.pathVariable("txId");
-//		Mono<TransferHistory> result = transferHistoryService.getTransferHistoryByTxId(txId);
-//		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(result, TransferHistory.class);
-		return null;
+	public Mono<ServerResponse> findAll(ServerRequest request) {
+		Flux<GoodsHistory> flux = goodsHistoryService.findAll();
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(flux, GoodsHistory.class);
 	}
 }
