@@ -3,8 +3,11 @@ package com.wkimdev.config;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 
+
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
+import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -41,28 +44,18 @@ public class WebFluxRouter extends DelegatingWebFluxConfiguration {
 	
 	@Bean
 	public RouterFunction<ServerResponse> orderServiceRouter() {
-
-//		 1. select 공연 내역
-//			- 공연 카테고리 플래그 코드  
-//			- 전체 공연 리스트	
-//			- 공연 디테일 내역  
-		
-//		 2. 공연 내역 추가 - admin 
-//			- 공연 내용 insert 
-			
-//		 3. order 내역 insert, select
-//			- 선택한 공연 주문하기
-//			- 선택한 공연 내역 확인(공연 내용과 결재내역)
-			
-		
-//		 4. buy 결재하기 
-//			- 결재 내역 플래그 걸기 : order_history table에 flag 컬럼에 업데이트
 			
 		 return route(GET("/show/lists").and(accept(APPLICATION_JSON)), goodsHistoryHandler::findAll)
-				.andRoute(POST("/show/lists").and(accept(APPLICATION_JSON)), goodsHistoryHandler::save)
+				.andRoute(GET("/show/lists/{idx}").and(accept(APPLICATION_JSON)), goodsHistoryHandler::findByIdx)
+				.andRoute(GET("/show/category/{category}").and(accept(APPLICATION_JSON)), goodsHistoryHandler::findByCategory)
+				.andRoute(GET("/show/artist/{artist}").and(accept(APPLICATION_JSON)), goodsHistoryHandler::findByArtist)
 				.andRoute(GET("/order/history").and(accept(APPLICATION_JSON)), orderHistoryHandler::findAll)
+				.andRoute(GET("/order/history/{idx}").and(accept(APPLICATION_JSON)), orderHistoryHandler::findByIdx)
+				
+				.andRoute(POST("/show/lists").and(accept(APPLICATION_JSON)), goodsHistoryHandler::save)
 	 			.andRoute(POST("/order/history").and(accept(APPLICATION_JSON)), orderHistoryHandler::save)
-		 		.andRoute(POST("/order/complete").and(accept(APPLICATION_JSON)), orderHistoryHandler::update);
+		 		.andRoute(PUT("/order/complete").and(accept(APPLICATION_JSON)), orderHistoryHandler::update)
+		 		.andRoute(DELETE("/show/{idx}").and(accept(APPLICATION_JSON)), goodsHistoryHandler::deleteByIdx);
 	}
 	
 }

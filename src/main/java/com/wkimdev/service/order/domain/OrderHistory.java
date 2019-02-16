@@ -6,20 +6,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
 
+/**
+ * 
+ * Order Domain
+ * 
+ * created by wkimdev
+ *
+ */
 @Data 
 @Document(collection="order_history")
 public class OrderHistory {
 	
 	@Id
-	private int idx;
+	private String idx;
 	
-	private String userUuId;
+	private String userId;
 	
-	// 예약 날짜
 	private String reserveDate;
 	
-	// 아이템넘버 
-	private int goodsNum;
+	// goods id 
+	private String goodsId;
 		
 	/*
 	 * 구매 여부 플래그

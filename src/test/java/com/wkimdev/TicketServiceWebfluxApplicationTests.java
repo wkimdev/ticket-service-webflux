@@ -1,13 +1,15 @@
 package com.wkimdev;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
@@ -37,7 +39,51 @@ public class TicketServiceWebfluxApplicationTests {
 		System.out.println(responseSpec.returnResult(typeReference));
 	}
 	
-	@Test
+//	@Test
+	public void showFindByIdTest() {
+		ResponseSpec responseSpec = webTestClient.get()
+												 .uri("/show/lists/2")
+												 .exchange()
+												 .expectStatus().isOk();
+										
+		ParameterizedTypeReference<List<GoodsHistory>> typeReference = new ParameterizedTypeReference<List<GoodsHistory>>() {};
+		System.out.println(responseSpec.returnResult(typeReference));
+	}
+	
+//	@Test
+	public void showFindByCategoryTest() {
+		ResponseSpec responseSpec = webTestClient.get()
+												 .uri("/show/category/M")
+												 .exchange()
+												 .expectStatus().isOk();
+										
+		ParameterizedTypeReference<List<GoodsHistory>> typeReference = new ParameterizedTypeReference<List<GoodsHistory>>() {};
+		System.out.println(responseSpec.returnResult(typeReference));
+	}
+	
+//	@Test
+	public void showFindByArtistTest() {
+		ResponseSpec responseSpec = webTestClient.get()
+												 .uri("/show/artist/옥주현")
+												 .exchange()
+												 .expectStatus().isOk();
+										
+		ParameterizedTypeReference<List<GoodsHistory>> typeReference = new ParameterizedTypeReference<List<GoodsHistory>>() {};
+		System.out.println(responseSpec.returnResult(typeReference));
+	}
+	
+//	@Test
+	public void orderFindByIdTest() {
+		ResponseSpec responseSpec = webTestClient.get()
+												 .uri("/order/history/ODNUM-3dae5938-ef19-4522-bb45-ec9573c39f49")
+												 .exchange()
+												 .expectStatus().isOk();
+										
+		ParameterizedTypeReference<List<OrderHistory>> typeReference = new ParameterizedTypeReference<List<OrderHistory>>() {};
+		System.out.println(responseSpec.returnResult(typeReference));
+	}
+	
+//	@Test
 	public void orderFindAllTest() {
 		ResponseSpec responseSpec = webTestClient.get()
 												 .uri("/order/history")
@@ -51,9 +97,8 @@ public class TicketServiceWebfluxApplicationTests {
 	public void orderSaveTest() {
 		
 		OrderHistory orderHistory = new OrderHistory();
-		orderHistory.setIdx(1);
-		orderHistory.setUserUuId("test_user");
-		orderHistory.setReserveDate("20190101");
+		orderHistory.setUserId("wkimdev");
+		orderHistory.setGoodsId("GOODS-79604901-6729-4862-a872-697a89c90e2a");
 		
 		webTestClient.post()
 						 .uri("/order/history")
@@ -67,11 +112,10 @@ public class TicketServiceWebfluxApplicationTests {
 	public void showSaveTest() {
 		
 		GoodsHistory goodsHistory = new GoodsHistory();
-		goodsHistory.setIdx(1);
-		goodsHistory.setTitle("잠실콘서트");
-		goodsHistory.setCategory("concert");
-		goodsHistory.setPerformancer("박효신");
-		goodsHistory.setPlace("올림픽대공원");
+		goodsHistory.setTitle("레베카");
+		goodsHistory.setCategory("M"); 
+		goodsHistory.setArtist("옥주현");
+		goodsHistory.setPlace("삼성역스퀘어");
 		
 		webTestClient.post()
 						 .uri("/show/lists")
@@ -82,25 +126,50 @@ public class TicketServiceWebfluxApplicationTests {
 	
 //	@Test
 	public void buyFlagUpdateTest() {
-		
-		// where 문 어떻게???
-		// 1. select 
-		// select 한 id를 받아서 where구문에 넣고 update
-		// id를 따로 response 받아서 처리해야지.
-		
-		// spring data entity가 id를 정의해놓았기 때문에 그걸 where 문 처리처럼 update하게 해줌. 
+		// spring data entity가 id를 정의해놓았기 때문에 그걸 where 문 처리처럼 update하게 해줌.
+		// update인데 request parameter들을 다 맵핑 해줘야 된다???
 		OrderHistory orderHistory = new OrderHistory();
-		orderHistory.setIdx(1);
-		orderHistory.setBuyFlag(1);
-		// 현재 시간 add
-		orderHistory.setBuyDate("190216");
+		orderHistory.setIdx("ODNUM-3dae5938-ef19-4522-bb45-ec9573c39f49");
+		orderHistory.setUserId("wkimdev");
+		orderHistory.setReserveDate("2019-02-16 10:17:16");
+		orderHistory.setGoodsId("GOODS-79604901-6729-4862-a872-697a89c90e2a");
+		orderHistory.setBuyFlag(2);
 		
-		webTestClient.post()
-						 .uri("/order/complete")
-						 .body(BodyInserters.fromObject(orderHistory))
-						 .exchange()
-						 .expectStatus().isOk();
+		// put 요청 : 요청 방식 post 시 no matching handler 에러!
+		webTestClient.put()
+					 .uri("/order/complete")
+					 .body(BodyInserters.fromObject(orderHistory))
+					 .exchange()
+					 .expectStatus().isOk();
 		
+	}
+	
+	@Test
+	public void deleteShowTest() {
+		webTestClient.delete()
+					 .uri("/show/1")
+					 .exchange()
+					 .expectStatus().isOk();
+	}
+	
+//	@Test
+	public void httpMethodErrorTest() {
+		// "message":"No matching handler"
+		ResponseSpec responseSpec = webTestClient.post()
+												 .uri("show/lists/4")
+												 .exchange()
+												 .expectStatus().isEqualTo(HttpStatus.NOT_FOUND);
+		System.out.println(responseSpec.returnResult(GoodsHistory.class));
+	}
+	
+//	@Test
+	public void dateTest() {
+		Date today = new Date();
+		SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat time = new SimpleDateFormat("hh:mm:ss");
+		
+		String reserveDate = date.format(today) + " " + time.format(today);
+		System.out.println(reserveDate);
 	}
 	
 }

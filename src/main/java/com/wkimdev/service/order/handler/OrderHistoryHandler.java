@@ -35,6 +35,17 @@ public class OrderHistoryHandler {
 	}
 	
 	/**
+	 * select order list
+	 * @param request
+	 * @return Mono<ServerResponse>
+	 */
+	public Mono<ServerResponse> findByIdx(ServerRequest request) {
+		Flux<OrderHistory> flux = orderHistoryService.findByIdx(request.pathVariable("idx"));
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(flux, OrderHistory.class);
+	}
+	
+	
+	/**
 	 * save document
 	 * @param request
 	 * @return Mono<ServerResponse>
