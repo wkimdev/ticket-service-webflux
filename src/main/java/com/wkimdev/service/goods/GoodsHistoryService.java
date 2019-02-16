@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.wkimdev.service.goods.domain.GoodsHistory;
 import com.wkimdev.service.goods.repo.GoodsHistoryRepository;
+import com.wkimdev.service.order.domain.OrderHistory;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service("GoodsHistoryService")
 public class GoodsHistoryService {
@@ -21,6 +23,15 @@ public class GoodsHistoryService {
 	 */
 	public Flux<GoodsHistory> findAll(){
 		return goodsHistoryRepository.findAll();
+	}
+	
+	/**
+	 * create document
+	 * @param show(goods) add  
+	 * @return Mono<OrderHistory>
+	 */
+	public Mono<GoodsHistory> save(GoodsHistory goodsHistory) {
+		return goodsHistoryRepository.save(goodsHistory);
 	}
 	
 }

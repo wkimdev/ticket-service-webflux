@@ -2,6 +2,7 @@ package com.wkimdev.service.goods.handler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -33,4 +34,14 @@ public class GoodsHistoryHandler {
 		Flux<GoodsHistory> flux = goodsHistoryService.findAll();
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(flux, GoodsHistory.class);
 	}
+	
+	/**
+	 * add show list
+	 * @param request
+	 * @return Mono<ServerResponse>
+	 */
+	public Mono<ServerResponse> save(ServerRequest request) {
+		Mono<GoodsHistory> result = request.bodyToMono(GoodsHistory.class).flatMap(mapper -> goodsHistoryService.save(mapper));
+		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(result, GoodsHistory.class);
+    }
 }
