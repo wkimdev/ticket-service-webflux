@@ -10,8 +10,13 @@
 - mongodb-reactive
 - junit 5
 - lombok 
-- jxjava2
+- Reactor
+- Rxjava2 
 ```
+- Reactor는 RxJava2를 내부적으로 가지고 있는 녀석 @see => https://projectreactor.io/
+- jdbc 설정일 경우 POM에 Rxjava2를 depengency에 설정하는 부분이 있지만 몽고디비는 그런 부분이 없는 차이가 있다(mongodb-reactive).  
+  
+
    
   
 # 서칭/학습한 내역(개인blog 정리)  
